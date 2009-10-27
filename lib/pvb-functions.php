@@ -55,7 +55,7 @@ function get_php_version_info($php_versions) {
  */
 function initialize_environment() {
 
-	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS);
+	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS, DIR_BUILD_PREFIX);
 
 	foreach ($dirs as $dir) {
 		if (!is_dir($dir)) {
@@ -211,7 +211,7 @@ function build_php ($phpdir, $prefix, $logpath) {
 					);
 	
 	if (VERBOSE) {
-		echo "INFO: Building $phpdir\n";
+		echo "INFO: Building $phpdir with prefix $prefix\n";
 	}
 	shell_exec(implode(' && ', $commands));
 }
@@ -226,4 +226,3 @@ function choose_random_mirror() {
 	shuffle($known_mirrors);
 	return $known_mirrors[0] . '.php.net';
 }
-

@@ -48,8 +48,11 @@ if (DO_PHP_BUILD) {
 
 	foreach ($it as $fileinfo) {
 
+		// Example prefix result: /path/to/phpbuilds/php-5.3.0
+		$prefix = realpath(DIR_BUILD_PREFIX) . '/' . $fileinfo->getFileName();
+
 		// Rudimentary cache check
-		if (file_exists(DIR_BUILD_PREFIX . $fileinfo->getFileName() . '/bin/php')) {
+		if (file_exists($prefix . '/bin/php')) {
 			if (VERBOSE) {
 				echo "INFO: Already successfully built from: " . $fileinfo->getBaseName() . "\n";
 			}
@@ -57,6 +60,6 @@ if (DO_PHP_BUILD) {
 		}
 
 		// Rudimentary build system
-		build_php($fileinfo->getPathName(), DIR_BUILD_PREFIX . $fileinfo->getFileName(), realpath(DIR_LOGS));
+		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS));
 	}
 }
