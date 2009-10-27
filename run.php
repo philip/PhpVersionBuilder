@@ -10,12 +10,12 @@ set_time_limit(0);
 
 define ('DIR_EXTRACTIONS',	'./extractions/');				// All extractions are done here
 define ('DIR_DOWNLOADS',	'./downloads/');				// All downloads go in here
-define ('DIR_BUILD_PREFIX',	'/home/philip/phpbuilds/');		// The builds (make install) go here
+define ('DIR_BUILD_PREFIX',	'./phpbuilds/');				// The builds (make install) go here
 define ('PATH_TAR',			'');							// Optional, otherwise 'which tar' path is used
 define ('DO_PHP_BUILD',		false);							// Whether do build PHP
 define ('VERBOSE',			true);							// Whether to output info about what is happening
 
-$php_versions  = array('4', '5', '6');
+$php_versions  = array('5', '6');
 $snap_versions = array('5.2', '5.3', '6.0');
 
 if (VERBOSE) {
