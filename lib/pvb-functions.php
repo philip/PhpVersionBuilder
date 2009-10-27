@@ -39,7 +39,7 @@ function get_php_version_info($php_versions) {
 			$data[$version] = array(
 				'date'		=> trim($vinfo['date']),
 				'filename'	=> trim($filename),
-				'museum'	=> trim($vinfo['museum']),
+				'museum'	=> (array_key_exists('museum', $vinfo) ? $vinfo['museum'] : false),
 			);
 			$count++;
 		}
