@@ -50,6 +50,9 @@ if (DO_PHP_BUILD) {
 
 		// Rudimentary cache check
 		if (file_exists(DIR_BUILD_PREFIX . $fileinfo->getFileName() . '/bin/php')) {
+			if (VERBOSE) {
+				echo "INFO: Already successfully built from: " . $fileinfo->getBaseName() . "\n";
+			}
 			continue;
 		}
 
