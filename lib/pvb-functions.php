@@ -55,7 +55,7 @@ function get_php_version_info($php_versions) {
  */
 function initialize_environment() {
 
-	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS);
+	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS);
 
 	foreach ($dirs as $dir) {
 		if (!is_dir($dir)) {
@@ -123,7 +123,7 @@ function extract_php_sources($extractpath, $sourcepath) {
 		$tar = constant('PATH_TAR') ? PATH_TAR : 'tar';
 
 		//FIXME: Research compatability with various sytems
-		$command = "$tar xfvz $filepath -C $extractpath";
+		$command = "$tar xfvz $filepath -C $extractpath 2>&1";
 		shell_exec($command);
 	}
 	return true;
@@ -195,15 +195,25 @@ function download_snap_sources ($versions, $path = 'downloads') {
 }
 
 /**
- * FIXME: Add logging, error handing, configure management, etc.
+ * FIXME: Add better logging, error handling, configure management, etc.
  * FIXME: Document what is needed, especially with older PHP versions
  * FIXME: Allow custom environments, like old bison for old PHP versions
  * Build a PHP version
  */
-function build_php ($phpdir, $prefix) {
-
-	$command = "cd $phpdir && ./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli && make && make install";
-	shell_exec($command);
+function build_php ($phpdir, $prefix, $logpath) {
+	
+	$logbase = $logpath . '/' . basename($phpdir);
+	
+	$commands = array(	"cd $phpdir",
+						"./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli > {$logbase}-configure 2>&1",
+						"make > {$logbase}-make 2>&1",
+						"make install > {$logbase}-make-install 2>&1",
+					);
+	
+	if (VERBOSE) {
+		echo "INFO: Building $phpdir\n";
+	}
+	shell_exec(implode(' && ', $commands));
 }
 
 /**
