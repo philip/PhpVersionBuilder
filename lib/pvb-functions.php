@@ -26,6 +26,7 @@ function get_php_version_info($php_versions) {
 			trigger_error("Unable to locate PHP versions for version: [$php_version]", E_USER_ERROR);
 		}
 		
+		$count = 0;
 		foreach ($versions as $version => $vinfo) {
 			
 			//FIXME: Note: Not all PHP versions have [the smaller] .bz2
@@ -40,6 +41,10 @@ function get_php_version_info($php_versions) {
 				'filename'	=> trim($filename),
 				'museum'	=> trim($vinfo['museum']),
 			);
+			$count++;
+		}
+		if (VERBOSE) {
+			echo "INFO: Found $count downloads for version $php_version\n";
 		}
 	}
 	return $data;
@@ -57,6 +62,10 @@ function initialize_environment() {
 			if (!mkdir($dir)) {
 				trigger_error("Unable to create the directory: [$dir]", E_USER_ERROR);
 				return false;
+			} else {
+				if (VERBOSE) {
+					echo "INFO: Created directory: $dir\n";
+				}
 			}
 		}
 		if (!is_readable($dir) || !is_writable($dir)) {
@@ -80,6 +89,9 @@ function initialize_environment() {
 			return false;
 		}
 	}
+	if (VERBOSE) {
+		echo "INFO: Found tar here: $tar\n";
+	}
 	
 	if (ini_get('allow_url_fopen') == 0) {
 		trigger_error("Need allow_url_fopen enabled, to download PHP sources from php.net", E_USER_ERROR);
@@ -102,6 +114,9 @@ function extract_php_sources($extractpath, $sourcepath) {
 		//FIXME: Is this check always going to work for regular downloads?
 		// Checks if version previously extracted
 		if (is_dir($extractpath . str_replace('.tar.gz', '', $fileinfo->getFileName()))) {
+			if (VERBOSE) {
+				echo "INFO: Already extracted $filepath\n";
+			}
 			continue;
 		}
 		
@@ -130,6 +145,9 @@ function download_php_sources ($versions, $path = 'downloads') {
 		$filepath = $path . '/' . $vinfo['filename'];
 		
 		if (file_exists($filepath)) {
+			if (VERBOSE) {
+				echo "INFO: Already downloaded: {$vinfo['filename']}\n";
+			}
 			continue;
 		}
 
@@ -141,7 +159,11 @@ function download_php_sources ($versions, $path = 'downloads') {
 		}
 
 		//FIXME: copy() here? Consider alternative approaches
-		copy($link, $filepath);
+		if (copy($link, $filepath)) {
+			if (VERBOSE) {
+				echo "INFO: Downloaded version: $version\n";
+			}
+		}
 	}
 	return true;
 }
@@ -163,7 +185,11 @@ function download_snap_sources ($versions, $path = 'downloads') {
 		$link = 'http://snaps.php.net/' . $filename;
 
 		//FIXME: copy() here? Consider alternative approaches
-		copy($link, $filepath);
+		if (copy($link, $filepath)) {
+			if (VERBOSE) {
+				echo "INFO: Downloaded snapshot for version: $version\n";
+			}
+		}
 	}
 	return true;
 }

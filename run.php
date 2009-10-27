@@ -13,9 +13,16 @@ define ('DIR_DOWNLOADS',	'./downloads/');				// All downloads go in here
 define ('DIR_BUILD_PREFIX',	'/home/philip/phpbuilds/');		// The builds (make install) go here
 define ('PATH_TAR',			'');							// Optional, otherwise 'which tar' path is used
 define ('DO_PHP_BUILD',		false);							// Whether do build PHP
+define ('VERBOSE',			true);							// Whether to output info about what is happening
 
 $php_versions  = array('4', '5', '6');
 $snap_versions = array('5.2', '5.3', '6.0');
+
+if (VERBOSE) {
+	// Show all errors
+	ini_set('display_errors', 1);
+	error_reporting(-1);
+}
 
 require './lib/pvb-functions.php';
 
