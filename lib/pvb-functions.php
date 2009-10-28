@@ -35,7 +35,7 @@ function get_php_version_info($php_versions) {
 		$count = 0;
 		foreach ($versions as $version => $vinfo) {
 			
-			if (version_compare($version, $php_version, '<=')) {
+			if (version_compare($version, $php_version, '<')) {
 				continue;
 			}
 
