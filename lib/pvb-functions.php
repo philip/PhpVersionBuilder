@@ -214,8 +214,13 @@ function build_php ($phpdir, $prefix, $logpath) {
 	
 	$logbase = $logpath . '/' . basename($phpdir);
 	
+	$preconfig = '';
+	if (PRE_CONFIG) {
+		$preconfig = PRE_CONFIG . ' ';
+	}
+	
 	$commands = array(	"cd $phpdir",
-						"./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli > {$logbase}-configure 2>&1",
+						"{$preconfig}./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli > {$logbase}-configure 2>&1",
 						"make > {$logbase}-make 2>&1",
 						"make install > {$logbase}-make-install 2>&1",
 					);

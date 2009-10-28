@@ -15,6 +15,7 @@ define ('DIR_LOGS',			'./logs/');						// Directory to store several logs
 define ('PATH_TAR',			'');							// Optional, otherwise 'which tar' path is used
 define ('DO_PHP_BUILD',		false);							// Whether do build PHP
 define ('VERBOSE',			true);							// Whether to output info about what is happening
+define ('PRE_CONFIG',		'');							// Options passed in before configure (Ex: LIBS, CFLAGS, etc.)
 
 $php_versions  = array('5', '6');
 $snap_versions = array('5.2', '5.3', '6.0');
