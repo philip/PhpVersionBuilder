@@ -215,8 +215,8 @@ function build_php ($phpdir, $prefix, $logpath) {
 	$logbase = $logpath . '/' . basename($phpdir);
 	
 	$preconfig = '';
-	if (PRE_CONFIG) {
-		$preconfig = PRE_CONFIG . ' ';
+	if (PRE_CONFIGURE) {
+		$preconfig = PRE_CONFIGURE . ' ';
 	}
 	
 	$commands = array(	"cd $phpdir",
