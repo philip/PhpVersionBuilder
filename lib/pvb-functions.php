@@ -15,7 +15,13 @@ function get_php_version_info($php_versions) {
 	$data = array();
 	foreach ($php_versions as $php_version) {
 
-		$ver_url  = 'http://' . choose_random_mirror() . '/releases/index.php?serialize=1&version=' . $php_version . '&max=42';
+		$php_version_major = $php_version{0};
+
+		if (!is_numeric($php_version_major)) {
+			trigger_error("Configured with invalid version information: $php_version", E_USER_ERROR);
+		}
+
+		$ver_url  = 'http://' . choose_random_mirror() . '/releases/index.php?serialize=1&version=' . $php_version_major . '&max=42';
 		$versions = unserialize(file_get_contents($ver_url));
 		
 		if (isset($versions['error'])) {
@@ -29,6 +35,10 @@ function get_php_version_info($php_versions) {
 		$count = 0;
 		foreach ($versions as $version => $vinfo) {
 			
+			if (version_compare($version, $php_version, '<=')) {
+				continue;
+			}
+
 			//FIXME: Note: Not all PHP versions have [the smaller] .bz2
 			//FIXME: Will this check always work?
 			$filename = $vinfo['source'][0]['filename'];		
@@ -44,7 +54,7 @@ function get_php_version_info($php_versions) {
 			$count++;
 		}
 		if (VERBOSE) {
-			echo "INFO: Found $count downloads for version $php_version\n";
+			echo "INFO: Found $count downloads for version $php_version_major ($php_version or greater)\n";
 		}
 	}
 	return $data;
