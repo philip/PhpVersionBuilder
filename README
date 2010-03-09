@@ -27,7 +27,7 @@ Requirements:
 
 Usage:
 -------------------------------------------------
-1. Edit configure options within run.php
+1. Edit configure options within inc/config.php
 2. Execute run.php
 
 Notes:
