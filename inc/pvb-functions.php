@@ -219,16 +219,30 @@ function build_php ($phpdir, $prefix, $logpath) {
 		$preconfig = PRE_CONFIGURE . ' ';
 	}
 	
-	$commands = array(	"cd $phpdir",
-						"{$preconfig}./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli > {$logbase}-configure 2>&1",
-						"make > {$logbase}-make 2>&1",
-						"make install > {$logbase}-make-install 2>&1",
-					);
+	$commands = array(
+		'configure'		=> "{$preconfig}./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli",
+		'make'			=> "make",
+		'make-install'	=> "make install",
+	);
 	
 	if (VERBOSE) {
 		echo "INFO: Building $phpdir with prefix $prefix\n";
 	}
-	shell_exec(implode(' && ', $commands));
+	
+	foreach ($commands as $command_name => $command) {
+
+		$descriptors = array(
+			0 => array('pipe', 'r'), // stdin
+			1 => array('file', "{$logbase}-out-{$command_name}", 'w'), // stdout
+			2 => array('file', "{$logbase}-err-{$command_name}", 'w')  // stderr
+		);
+		$pipes = array();
+
+		$process = proc_open($command, $descriptors, $pipes, $phpdir);
+		fclose($pipes[0]);
+		proc_close($process);
+
+	}
 }
 
 /**
