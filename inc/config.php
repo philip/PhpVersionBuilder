@@ -31,3 +31,17 @@ $php_versions  = array('5.2.8');
 
 // Which snaps to download/build
 $snap_versions = array('5.3');
+
+// Options passed to ./configure
+// --prefix is already set, and based on the php version
+$config_options = array(
+	'--disable-all', 
+	'--disable-cgi', 
+	'--enable-cli',
+);
+
+// TODO: Add version specific options? 
+$config_options_versions = array(
+	'5.2.0+' => '--with-foo',
+	'5.3.1'  => '--disable-bar',
+}

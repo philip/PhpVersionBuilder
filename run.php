@@ -50,6 +50,6 @@ if (DO_PHP_BUILD) {
 		}
 
 		// Rudimentary build system
-		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS));
+		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS), $config_options);
 	}
 }

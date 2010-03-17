@@ -210,7 +210,7 @@ function download_snap_sources ($versions, $path = 'downloads') {
  * FIXME: Allow custom environments, like old bison for old PHP versions
  * Build a PHP version
  */
-function build_php ($phpdir, $prefix, $logpath) {
+function build_php ($phpdir, $prefix, $logpath, $config_options) {
 	
 	$logbase = $logpath . '/' . basename($phpdir);
 	
@@ -220,7 +220,7 @@ function build_php ($phpdir, $prefix, $logpath) {
 	}
 	
 	$commands = array(
-		'configure'		=> "{$preconfig}./configure --prefix=$prefix --disable-all --disable-cgi --enable-cli",
+		'configure'		=> "{$preconfig}./configure --prefix=$prefix " . implode(' ', $config_options),
 		'make'			=> "make",
 		'make-install'	=> "make install",
 	);
