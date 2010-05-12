@@ -44,4 +44,4 @@ $config_options = array(
 $config_options_versions = array(
 	'5.2.0+' => '--with-foo',
 	'5.3.1'  => '--disable-bar',
-}
+);
