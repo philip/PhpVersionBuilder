@@ -8,6 +8,7 @@ What it does:
 - Finds and downloads each PHP release
 - Extracts
 - Builds
+- Tests/compares PHP code
 
 What it does not do, but will do:
 -------------------------------------------------
@@ -29,6 +30,7 @@ Usage:
 -------------------------------------------------
 1. Edit configure options within inc/config.php
 2. Execute run.php
+3. Execute execute_php.php to test PHP code against each version
 
 Notes:
 -------------------------------------------------
