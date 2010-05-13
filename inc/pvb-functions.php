@@ -246,6 +246,88 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
 }
 
 /**
+ * Runs a command, and logs all output.
+ * FIXME: Determine ways this might fail, and adjust accordingly
+*/
+function run_shell_command ($command, $dir = '.') {
+	
+	$descriptors = array(
+		0 => array('pipe', 'r'), // stdin
+		1 => array('pipe', 'w'), // stdout
+		2 => array('pipe', 'w')  // stderr
+	);
+	$pipes = array();
+
+	$process = proc_open($command, $descriptors, $pipes, $dir);
+	
+	$out = array(
+		'command'=> $command,
+		'dir'    => $dir,
+		'stdin'  => stream_get_contents($pipes[0]),
+		'stdout' => stream_get_contents($pipes[1]),
+		'stderr' => stream_get_contents($pipes[2]),
+	);
+	
+	fclose($pipes[0]);
+	fclose($pipes[1]);
+	fclose($pipes[2]);
+
+	proc_close($process);
+	
+	return $out;
+}
+
+/**
+ * Get status of PHP binaries, and returns information as an array
+ * FIXME: Make better use of debugging information (likely breaking API) e.g., $out
+*/
+function get_status_binaries($path) {
+
+	// Directories of builds	
+	$iterator = new GlobIterator($path .'php-*', FilesystemIterator::CURRENT_AS_FILEINFO);
+
+	$good = $bad = array();
+	foreach ($iterator as $it) {
+
+		// If bin/php exists and outputs something known
+		$out = run_shell_command($it->getPathname() . '/bin/php -v');
+
+		// FIXME: Better known check, and deal with bads
+		if (false !== strpos($out['stdout'], '(cli) (built:')) {
+			$good[$it->getBasename()] = $it;
+		} else {
+			$bad[$it->getBasename()]  = $it;
+		}
+	}
+	uksort($good, 'strnatcmp');
+	uksort($bad,  'strnatcmp');
+	
+	return array('good' => $good, 'bad' => $bad);
+}
+
+/**
+ * Checks if $configure_options are valid
+ * Returns false with error, array() if yes, array(...) if no
+*/
+function check_configure_valid ($path, $configure_options) {
+
+	$out = run_shell_command($path . '/configure --help');
+
+	if (empty($out['stdout'])) {
+		return false;
+	}
+	$configure_help = $out['stdout'];
+
+	$unknowns = array();
+	foreach ($configure_options as $option) {
+		if (false === stripos($configure_help, $option)) {
+			$unknowns[] = $option;
+		}
+	}
+	return $unknowns;
+}
+
+/**
  * Choose a random mirror
  * FIXME: Ensure the mirror is working, and consider removing this sketchy feature
 */
