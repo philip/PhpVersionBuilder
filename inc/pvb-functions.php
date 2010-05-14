@@ -41,13 +41,16 @@ function get_php_version_info($php_versions) {
 
 			//FIXME: Note: Not all PHP versions have [the smaller] .bz2
 			//FIXME: Will this check always work?
-			$filename = $vinfo['source'][0]['filename'];		
+			$filename = $vinfo['source'][0]['filename'];
+			$md5hash   = $vinfo['source'][0]['md5'];
 			if (false === strpos($filename, 'tar.gz')) {
 				$filename = $vinfo['source'][1]['filename'];
+				$md5hash   = $vinfo['source'][1]['md5'];
 			}
 
 			$data[$version] = array(
 				'date'		=> trim($vinfo['date']),
+				'md5hash'	=> trim($md5hash),
 				'filename'	=> trim($filename),
 				'museum'	=> (array_key_exists('museum', $vinfo) ? $vinfo['museum'] : false),
 			);
@@ -152,8 +155,9 @@ function download_php_sources ($versions, $path = 'downloads') {
 			continue;
 		}
 
-		$filepath = $path . '/' . $vinfo['filename'];
-		
+		$filename = $vinfo['filename'];
+		$filepath = $path . '/' . $filename;
+		//FIXME: Add md5_file() check here
 		if (file_exists($filepath)) {
 			if (VERBOSE) {
 				echo "INFO: Already downloaded: {$vinfo['filename']}\n";
@@ -163,16 +167,16 @@ function download_php_sources ($versions, $path = 'downloads') {
 
 		//FIXME: Do a URL check here (for 404, etc)
 		if (empty($vinfo['museum'])) {
-			$link = 'http://' . choose_random_mirror() . '/distributions/' . $vinfo['filename'];
+			$link = 'http://' . choose_random_mirror() . '/distributions/' . $filename;
 		} else {
-			$link = 'http://museum.php.net/php' . $version[0] . '/' . $vinfo['filename'];
+			$link = 'http://museum.php.net/php' . $version[0] . '/' . $filename;
 		}
 
-		//FIXME: copy() here? Consider alternative approaches
-		if (copy($link, $filepath)) {
-			if (VERBOSE) {
-				echo "INFO: Downloaded version: $version\n";
-			}
+		//FIXME: Test with older PHP's as md5 hashes aren't always available
+		if (download_file($link, $filepath, $vinfo['md5hash'])) {
+			echo " ... finished downloading $filename." . PHP_EOL;
+		} else {
+			echo "ERROR: Unable to download from link ($link) to filepath ($filepath).\n";
 		}
 	}
 	return true;
@@ -328,6 +332,32 @@ function check_configure_valid ($path, $configure_options) {
 }
 
 /**
+ * Download a file ($url) to a given path ($savepath) and display progress information while doing it
+ * Optionally check saved file against a known md5 hash
+*/
+function download_file ($url, $savepath, $md5hash = false) {
+
+	// Stream the file, and output status information as defined in stream_notification_callback() via STREAM_NOTIFY_PROGRESS
+	// Requires PHP 5.2.0+
+	$ctx = stream_context_create();
+	stream_context_set_params($ctx, array('notification' => 'stream_notification_callback'));
+
+	$fp = fopen($url, 'r', false, $ctx);
+	if (is_resource($fp) && file_put_contents($savepath, $fp)) {
+		fclose($fp);
+		if ($md5hash) {
+			if (md5_file($savepath) === $md5hash) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+/**
  * Choose a random mirror
  * FIXME: Ensure the mirror is working, and consider removing this sketchy feature
 */
@@ -336,4 +366,51 @@ function choose_random_mirror() {
 	$known_mirrors = array('us', 'us2', 'uk', 'uk2', 'www');
 	shuffle($known_mirrors);
 	return $known_mirrors[0] . '.php.net';
+}
+
+/**
+ * For use with download_file(), namely for progress notification of the download
+ * Bulk of this taken from the PHP Manual @ http://php.net/stream_notification_callback
+*/
+function stream_notification_callback($notification_code, $severity, $message, $message_code, $bytes_transferred, $bytes_max) {
+	static $filesize = null;
+
+	switch($notification_code) {
+	case STREAM_NOTIFY_RESOLVE:
+	case STREAM_NOTIFY_AUTH_REQUIRED:
+	case STREAM_NOTIFY_COMPLETED:
+	case STREAM_NOTIFY_FAILURE:
+	case STREAM_NOTIFY_AUTH_RESULT:
+		break;
+
+	case STREAM_NOTIFY_REDIRECTED:
+		#echo 'Being redirected to: ', $message, PHP_EOL;
+		break;
+
+	case STREAM_NOTIFY_CONNECT:
+		#echo 'Connected...' . PHP_EOL;
+		break;
+
+	case STREAM_NOTIFY_FILE_SIZE_IS:
+		$filesize = $bytes_max;
+		#echo 'Filesize: ', $filesize, PHP_EOL;
+		break;
+
+	case STREAM_NOTIFY_MIME_TYPE_IS:
+		#echo 'Mime-type: ', $message, PHP_EOL;
+		break;
+
+	case STREAM_NOTIFY_PROGRESS:
+		if ($bytes_transferred > 0) {
+			if (!isset($filesize)) {
+				printf("\rUnknown filesize.. %2d kb done..", $bytes_transferred/1024);
+			} else {
+				if (VERBOSE) {
+					$length = (int)(($bytes_transferred/$filesize)*100);
+					printf("\r%d%% (%2d/%2d kb)", $length, ($bytes_transferred/1024), $filesize/1024);
+				}
+			}
+		}
+		break;
+	}
 }
