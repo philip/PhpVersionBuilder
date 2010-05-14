@@ -2,7 +2,7 @@ TODO:
 - Refactor so downloading, extracting and building a single version can take place in one go
 - Allow per version configure tweaks/hacks for building
 - Handle snapshots better
-- Create companion that executes code and compares output against PHP versions
+- Create companion that executes code and compares output against PHP versions (implemented)
 - Consider a version for building PECL
 - Come up with a better name for this project
 - Research compatible gunzip/tar solution, consider offering a native PHP approach
