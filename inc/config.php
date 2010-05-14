@@ -27,10 +27,11 @@ define ('PRE_CONFIGURE', '');
 
 // Includes all versions greater than defined values, separated by major version
 // Ex: '4', '5' === all PHP 4's and 5's. '5.2.4' === All 5 versions >= 5.2.4
-$php_versions  = array('5.2.8');
+$php_versions  = array('5.2.11');
 
+// TODO: This isn't implemented
 // Which snaps to download/build
-$snap_versions = array('5.3');
+$snap_versions = array();
 
 // Options passed to ./configure
 // --prefix is already set, and based on the php version
@@ -40,7 +41,7 @@ $config_options = array(
 	'--enable-cli',
 );
 
-// TODO: Add version specific options? 
+// TODO: This isn't implemented. Add version specific options? 
 $config_options_versions = array(
 	'5.2.0+' => '--with-foo',
 	'5.3.1'  => '--disable-bar',
