@@ -1,7 +1,4 @@
 <?php
-
-/* This is just a test. */
-
 // Where PHP tarballs are downloaded to
 define ('DIR_DOWNLOADS', './downloads/');
 
