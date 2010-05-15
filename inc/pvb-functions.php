@@ -125,6 +125,9 @@ function extract_php_sources($extractpath, $sourcepath) {
 
 	$it = new FilesystemIterator($sourcepath);
 
+	if (VERBOSE) {
+		echo PHP_EOL, 'INFO: Extracting PHP sources now.', PHP_EOL;
+	}
 	foreach ($it as $fileinfo) {
 		$filepath = $fileinfo->getPathName();
 

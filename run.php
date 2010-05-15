@@ -49,4 +49,22 @@ if (DO_PHP_BUILD) {
 		// Rudimentary build system
 		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS), $config_options_all);
 	}
+	
+	if (VERBOSE) {
+		echo PHP_EOL;
+		$status = get_status_binaries(DIR_BUILD_PREFIX);
+		if ($status['bad']) {
+			echo 'INFO: These PHP versions failed to build:', PHP_EOL;
+			echo 'INFO: Check the logs for reasons why, as found in: ', DIR_LOGS, PHP_EOL;
+			foreach ($status['bad'] as $version => $it) {
+				echo "\t", $version, PHP_EOL;
+			}
+		}
+		if ($status['good']) {
+			echo 'INFO: These PHP versions built with success:', PHP_EOL;
+			foreach ($status['good'] as $version => $it) {
+				echo "\t", $version, PHP_EOL;
+			}
+		}
+	}
 }
