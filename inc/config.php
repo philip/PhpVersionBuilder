@@ -59,3 +59,10 @@ $colours = array(
 	'FFFFCC', 'E6FFCC', 'CCFFCC', 'CCFFE6', 'FFE6CC', 'FFFF8F', 'FFFF52', 'CCFFFF',
 	'FFCCCC', '5252FF', 'CCE6FF', 'E6CCFF', 'E0E0E0', 'FFFFFF',
 );
+
+set_time_limit(0);
+if (VERBOSE) {
+	// Show all errors
+	ini_set('display_errors', 1);
+	error_reporting(-1);
+}

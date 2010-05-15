@@ -6,16 +6,8 @@
  * @license MIT license
  *
 */
-set_time_limit(0);
-
 require './inc/config.php';
 require './inc/pvb-functions.php';
-
-if (VERBOSE) {
-	// Show all errors
-	ini_set('display_errors', 1);
-	error_reporting(-1);
-}
 
 // Creates directories and checks prerequisites
 initialize_environment();
