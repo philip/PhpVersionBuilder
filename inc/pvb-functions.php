@@ -68,6 +68,11 @@ function get_php_version_info($php_versions) {
  */
 function initialize_environment() {
 
+	if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+		trigger_error('PHP version 5.2.0 or greater is required. Sorry.', E_USER_ERROR);
+		return false;
+	}
+
 	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS, DIR_BUILD_PREFIX);
 
 	foreach ($dirs as $dir) {
