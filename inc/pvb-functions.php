@@ -42,10 +42,10 @@ function get_php_version_info($php_versions) {
 			//FIXME: Note: Not all PHP versions have [the smaller] .bz2
 			//FIXME: Will this check always work?
 			$filename = $vinfo['source'][0]['filename'];
-			$md5hash   = $vinfo['source'][0]['md5'];
+			$md5hash  = isset($vinfo['source'][0]['md5']) ? $vinfo['source'][0]['md5'] : '';
 			if (false === strpos($filename, 'tar.gz')) {
 				$filename = $vinfo['source'][1]['filename'];
-				$md5hash   = $vinfo['source'][1]['md5'];
+				$md5hash  = isset($vinfo['source'][1]['md5']) ? $vinfo['source'][1]['md5'] : '';
 			}
 
 			$data[$version] = array(
@@ -242,6 +242,11 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
 	}
 	
 	foreach ($commands as $command_name => $command) {
+
+		// TODO: Add error checking/reporting. E.g., if configure failed, say so.
+		if (VERBOSE) {
+			echo 'INFO: Running ', $command_name,' now', PHP_EOL;
+		}
 
 		$descriptors = array(
 			0 => array('pipe', 'r'), // stdin
