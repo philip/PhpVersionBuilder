@@ -36,18 +36,19 @@ $php_versions  = array('5.2.11');
 // Which snaps to download/build
 $snap_versions = array();
 
-// Options passed to ./configure
+// Options passed to all configures
 // --prefix is already set, and based on the php version
-$config_options = array(
+$config_options_all = array(
 	'--disable-all', 
 	'--disable-cgi', 
 	'--enable-cli',
 );
 
-// TODO: This isn't implemented. Add version specific options? 
+// Options passed to version (branch) specific configures
+// Example: array('5.3' => '--enable-intl', '5.2' => '');
 $config_options_versions = array(
-	'5.2.0+' => '--with-foo',
-	'5.3.1'  => '--disable-bar',
+	'5.2' => '',
+	'5.3' => '',
 );
 
 // Colours used in optional HTML output, First to Last.

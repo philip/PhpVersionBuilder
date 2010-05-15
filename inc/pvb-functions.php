@@ -362,6 +362,21 @@ function download_file ($url, $savepath, $md5hash = false) {
 	return false;
 }
 
+function get_version_configs($options, $version) {
+
+	if (empty($options)) {
+		return false;
+	}
+	
+	// php-5.3.0 -> 5.3
+	$version = preg_replace('/(php-)(\d+).(\d+).(\d+)/', '$2.$3', $version);
+	
+	if (empty($options[$version])) {
+		return false;
+	}
+	return $options[$version];
+}
+
 /**
  * Choose a random mirror
  * FIXME: Ensure the mirror is working, and consider removing this sketchy feature
