@@ -1,10 +1,10 @@
 <?php
 /**
- * PhpVersionBuilder : Function library
+ * PhpVersionBuilder function library
  *
- * @author Philip Olson <philip@php.net>
- * @license MIT License
- *
+ * @author Philip Olson <philip@roshambo.org>
+ * @license MIT license
+ * @link http://github.com/philip/PhpVersionBuilder
 */
 
 /**

@@ -1,11 +1,12 @@
 <?php
 /**
- * PhpVersionBuilder : Downloads, extracts and builds [almost] all versions of PHP.
+ * PhpVersionBuilder run script
  *
- * @author Philip Olson <philip@php.net>
+ * @author Philip Olson <philip@roshambo.org>
  * @license MIT license
- *
+ * @link http://github.com/philip/PhpVersionBuilder
 */
+
 require './inc/config.php';
 require './inc/pvb-functions.php';
 
