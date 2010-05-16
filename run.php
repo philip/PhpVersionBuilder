@@ -36,7 +36,7 @@ if (DO_PHP_BUILD) {
 		// Rudimentary cache check
 		if (file_exists($prefix . '/bin/php')) {
 			if (VERBOSE) {
-				echo "INFO: Already successfully built from: " . $fileinfo->getBaseName() . "\n";
+				echo 'INFO: Already successfully built from: ', $fileinfo->getBaseName(), PHP_EOL;
 			}
 			continue;
 		}

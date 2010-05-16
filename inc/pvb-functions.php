@@ -57,7 +57,7 @@ function get_php_version_info($php_versions) {
 			$count++;
 		}
 		if (VERBOSE) {
-			echo "INFO: Found $count downloads for version $php_version_major ($php_version or greater)\n";
+			echo "INFO: Found $count downloads for version $php_version_major ($php_version or greater)", PHP_EOL;
 		}
 	}
 	return $data;
@@ -82,7 +82,7 @@ function initialize_environment() {
 				return false;
 			} else {
 				if (VERBOSE) {
-					echo "INFO: Created directory: $dir\n";
+					echo "INFO: Created directory: $dir", PHP_EOL;
 				}
 			}
 		}
@@ -108,7 +108,7 @@ function initialize_environment() {
 		}
 	}
 	if (VERBOSE) {
-		echo "INFO: Found tar here: {$tar['stdout']}\n";
+		echo "INFO: Found tar here: {$tar['stdout']}", PHP_EOL;
 	}
 	
 	if (ini_get('allow_url_fopen') == 0) {
@@ -136,7 +136,7 @@ function extract_php_sources($extractpath, $sourcepath) {
 		// Checks if version previously extracted
 		if (is_dir($extractpath . str_replace('.tar.gz', '', $fileinfo->getFileName()))) {
 			if (VERBOSE) {
-				echo "INFO: Already extracted $filepath\n";
+				echo "INFO: Already extracted $filepath", PHP_EOL;
 			}
 			continue;
 		}
@@ -172,7 +172,7 @@ function download_php_sources ($versions, $path = 'downloads') {
 		//FIXME: Add md5_file() check here
 		if (file_exists($filepath)) {
 			if (VERBOSE) {
-				echo "INFO: Already downloaded: {$vinfo['filename']}\n";
+				echo "INFO: Already downloaded: {$vinfo['filename']}", PHP_EOL;
 			}
 			continue;
 		}
@@ -188,7 +188,7 @@ function download_php_sources ($versions, $path = 'downloads') {
 		if (download_file($link, $filepath, $vinfo['md5hash'])) {
 			echo " ... finished downloading $filename." . PHP_EOL;
 		} else {
-			echo "ERROR: Unable to download from link ($link) to filepath ($filepath).\n";
+			echo "ERROR: Unable to download from link ($link) to filepath ($filepath).", PHP_EOL;
 		}
 	}
 	return true;
@@ -213,7 +213,7 @@ function download_snap_sources ($versions, $path = 'downloads') {
 		//FIXME: copy() here? Consider alternative approaches
 		if (copy($link, $filepath)) {
 			if (VERBOSE) {
-				echo "INFO: Downloaded snapshot for version: $version\n";
+				echo "INFO: Downloaded snapshot for version: $version", PHP_EOL;
 			}
 		}
 	}
@@ -242,7 +242,7 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
 	);
 	
 	if (VERBOSE) {
-		echo "INFO: Building $phpdir with prefix $prefix\n";
+		echo "INFO: Building $phpdir with prefix $prefix", PHP_EOL;
 	}
 	
 	foreach ($commands as $command_name => $command) {
