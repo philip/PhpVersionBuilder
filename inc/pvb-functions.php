@@ -101,14 +101,14 @@ function initialize_environment() {
 			return false;
 		}
 	} else {
-		$tar = shell_exec('which tar');
-		if (false === strpos($tar, '/tar')) {
+		$tar = run_shell_command('which tar');
+		if (false === strpos($tar['stdout'], '/tar')) {
 			trigger_error("Unable to locate the tar command, needed for file extraction", E_USER_ERROR);
 			return false;
 		}
 	}
 	if (VERBOSE) {
-		echo "INFO: Found tar here: $tar\n";
+		echo "INFO: Found tar here: {$tar['stdout']}\n";
 	}
 	
 	if (ini_get('allow_url_fopen') == 0) {
@@ -144,8 +144,12 @@ function extract_php_sources($extractpath, $sourcepath) {
 		$tar = constant('PATH_TAR') ? PATH_TAR : 'tar';
 
 		//FIXME: Research compatability with various sytems
-		$command = "$tar xfvz $filepath -C $extractpath 2>&1";
-		shell_exec($command);
+		$command = "$tar xfvz $filepath -C $extractpath";
+		$out     = run_shell_command($command);
+		if (!empty($out['stderr'])) {
+			trigger_error("Unable to untar file. Command ($command) Error: ({$out['stderr']}", E_USER_ERROR);
+			return false;
+		}
 	}
 	return true;
 }
