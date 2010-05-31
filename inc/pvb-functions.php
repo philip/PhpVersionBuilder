@@ -245,6 +245,11 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
 		echo "INFO: Building $phpdir with prefix $prefix", PHP_EOL;
 	}
 	
+	// Remove possible cache related issues
+	if (MAKE_DISTCLEAN && file_exists($phpdir . '/Makefile')) {
+		$commands =  array_merge(array('make-distclean' => 'make distclean'), $commands);
+	}
+	
 	foreach ($commands as $command_name => $command) {
 
 		// TODO: Add error checking/reporting. E.g., if configure failed, say so.

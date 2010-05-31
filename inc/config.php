@@ -24,6 +24,9 @@ define ('VERBOSE', true);
 // Options passed before ./configure (Ex: for LIBS, CFLAGS, etc.)
 define ('PRE_CONFIGURE', '');
 
+// True to run 'make distclean'
+define ('MAKE_DISTCLEAN', true);
+
 // Default output mode (see execute_php.php). Either 'stdout' for simple output, or 'html'
 // Example: ./execute_php.php test.php html > test.html && firefox test.html
 define ('DEFAULT_OUTPUT_TYPE', 'stdout');
