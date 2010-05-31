@@ -250,6 +250,9 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
 		// TODO: Add error checking/reporting. E.g., if configure failed, say so.
 		if (VERBOSE) {
 			echo 'INFO: Running ', $command_name,' now', PHP_EOL;
+			if ($command_name === 'configure') {
+				echo 'INFO: Command: ', $command, PHP_EOL;
+			}
 		}
 
 		$descriptors = array(
