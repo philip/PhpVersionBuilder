@@ -44,11 +44,11 @@ if (DO_PHP_BUILD) {
 		
 		// Optional version specific options, see inc/config.php
 		if ($more_options = get_version_configs($config_options_versions, $fileinfo->getFileName())) {
-			$config_options_all = array_merge($config_options_all, array($more_options));
+			$config_options_run = array_merge($config_options_all, array($more_options));
 		}
 
 		// Rudimentary build system
-		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS), $config_options_all);
+		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS), $config_options_run);
 	}
 	
 	if (VERBOSE) {
