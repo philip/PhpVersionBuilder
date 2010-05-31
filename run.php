@@ -45,6 +45,8 @@ if (DO_PHP_BUILD) {
 		// Optional version specific options, see inc/config.php
 		if ($more_options = get_version_configs($config_options_versions, $fileinfo->getFileName())) {
 			$config_options_run = array_merge($config_options_all, array($more_options));
+		} else {
+			$config_options_run = $config_options_all;
 		}
 
 		// Rudimentary build system
