@@ -270,20 +270,33 @@ function build_php ($phpdir, $prefix, $logpath, $config_options) {
  * Runs a command, and logs all output.
  * FIXME: Determine ways this might fail, and adjust accordingly
 */
-function run_shell_command ($command, $dir = '.') {
+function run_shell_command ($command, $dir = NULL) {
+
+	$errors = array();
+	$pipes  = array();
+
+	// Dir must be an absolute path, or NULL
+	if ($dir) {
+		if (is_dir($dir)) {
+			$dir = realpath($dir);
+		} else {
+			$dir      = NULL;
+			$errors[] = 'The set DIR does not exist: ' . $dir;
+		}
+	}
 	
 	$descriptors = array(
 		0 => array('pipe', 'r'), // stdin
 		1 => array('pipe', 'w'), // stdout
-		2 => array('pipe', 'w')  // stderr
+		2 => array('pipe', 'a')  // stderr
 	);
-	$pipes = array();
 
 	$process = proc_open($command, $descriptors, $pipes, $dir);
 	
 	$out = array(
 		'command'=> $command,
 		'dir'    => $dir,
+		'errors' => $errors,
 		'stdin'  => stream_get_contents($pipes[0]),
 		'stdout' => stream_get_contents($pipes[1]),
 		'stderr' => stream_get_contents($pipes[2]),
