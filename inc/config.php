@@ -12,6 +12,13 @@ define ('DIR_BUILD_PREFIX', './phpbuilds/');
 // Where all the logs (like from configure, make, etc.) are stored
 define ('DIR_LOGS', './logs/');
 
+// Where successful PHP binaries will be copied to
+define ('DIR_PHP_BINARIES', './bins/');
+
+// True will remove source/extract/build files on successful builds
+// @todo not yet implemented
+define ('CLEANUP_ON_SUCCESSFUL_BUILD', false);
+
 // Optionally define the tar location, otherwise 'which tar' is used
 define ('PATH_TAR', '');
 

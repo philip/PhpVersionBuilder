@@ -51,6 +51,12 @@ if (DO_PHP_BUILD) {
 
 		// Rudimentary build system
 		build_php($fileinfo->getPathName(), $prefix, realpath(DIR_LOGS), $config_options_run);
+
+		if (file_exists($prefix . '/bin/php')) {
+			if (copy($prefix . '/bin/php', DIR_PHP_BINARIES . DIRECTORY_SEPARATOR . $fileinfo->getBaseName())) {
+				chmod(DIR_PHP_BINARIES . DIRECTORY_SEPARATOR . $fileinfo->getBaseName(), 0755);
+			}
+		}
 	}
 	
 	if (VERBOSE) {

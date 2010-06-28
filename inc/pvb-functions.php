@@ -73,7 +73,7 @@ function initialize_environment() {
 		return false;
 	}
 
-	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS, DIR_BUILD_PREFIX);
+	$dirs = array(DIR_DOWNLOADS, DIR_EXTRACTIONS, DIR_LOGS, DIR_BUILD_PREFIX, DIR_PHP_BINARIES);
 
 	foreach ($dirs as $dir) {
 		if (!is_dir($dir)) {
