@@ -333,12 +333,14 @@ function get_status_binaries($path) {
 
 		// If bin/php exists and outputs something known
 		$out = run_shell_command($it->getPathname() . '/bin/php -v');
+		
+		$info = array('base' => $it->getBasename(), 'path' => $it->getPathName(), 'file' => $it->getFilename());
 
 		// FIXME: Better known check, and deal with bads
 		if (false !== strpos($out['stdout'], '(cli) (built:')) {
-			$good[$it->getBasename()] = $it;
+			$good[$it->getBasename()] = $info;
 		} else {
-			$bad[$it->getBasename()]  = $it;
+			$bad[$it->getBasename()]  = $info;
 		}
 	}
 	uksort($good, 'strnatcmp');
