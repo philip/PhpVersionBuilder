@@ -30,7 +30,7 @@ if (!count($status['good'])) {
 $text = array();
 foreach ($status['good'] as $version => $it) {
 
-	$out = run_shell_command(DIR_BUILD_PREFIX . $version . '/bin/php -f ' . $test_script_name);
+	$out = run_shell_command(DIR_BUILD_PREFIX . $version . '/bin/php -d error_reporting=-1  -f ' . $test_script_name);
 
 	if ($out['stdout']) {
 		$text[$version] = $out['stdout'];
