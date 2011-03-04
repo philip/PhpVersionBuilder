@@ -8,6 +8,7 @@
 1. Edit configure options within inc/config.php
 2. Execute run.php
 3. Execute execute_php.php to test PHP code against each version
+-  Example: ./execute_php.php scripts/out/version_minor.php
 
 ## Requirements ##
 - PHP
@@ -22,7 +23,7 @@
 - See the FIXME comments that litter the code, and also the TODO
 
 ## History ##
-Originally a simple downloader/extractor for scanning PHP code, build and execute components were later added.
+- Originally a simple downloader/extractor for scanning PHP code, build and execute components were later added.
 
 ## Notes ##
 - This all takes a good amount of time and space
