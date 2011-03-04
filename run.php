@@ -31,6 +31,12 @@ if (DO_PHP_BUILD) {
 
 	foreach ($it as $fileinfo) {
 
+		$version = str_replace('php-', '', $fileinfo->getFileName());
+		if (!isset($version_info[$version])) {
+			echo "Found extractions directory for '$version' but skipping, it is not set within config php_versions", PHP_EOL;
+			continue;
+		}
+		
 		// Example prefix result: /path/to/phpbuilds/php-5.3.0
 		$prefix = realpath(DIR_BUILD_PREFIX) . '/' . $fileinfo->getFileName();
 
