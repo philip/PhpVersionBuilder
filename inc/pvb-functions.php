@@ -21,7 +21,13 @@ function get_php_version_info($php_versions) {
 			trigger_error("Configured with invalid version information: $php_version", E_USER_ERROR);
 		}
 
-		$ver_url  = 'http://' . choose_random_mirror() . '/releases/index.php?serialize=1&version=' . $php_version_major . '&max=42';
+		$ver_url = 'http://' . choose_random_mirror() . '/releases/index.php?serialize=1&version=' . $php_version_major . '&max=42';
+		$_get    = file_get_contents($ver_url);
+		if (!$_get) {
+			trigger_error("Unable to retrieve version information from this URL: $ver_url", E_USER_ERROR);
+			return false;
+		}
+		
 		$versions = unserialize(file_get_contents($ver_url));
 		
 		if (isset($versions['error'])) {
@@ -42,14 +48,16 @@ function get_php_version_info($php_versions) {
 			//FIXME: Note: Not all PHP versions have [the smaller] .bz2
 			//FIXME: Will this check always work?
 			$filename = $vinfo['source'][0]['filename'];
-			$md5hash  = isset($vinfo['source'][0]['md5']) ? $vinfo['source'][0]['md5'] : '';
+			$md5hash  = isset($vinfo['source'][0]['md5'])  ? $vinfo['source'][0]['md5']  : '';
+			$date     = isset($vinfo['source'][0]['date']) ? $vinfo['source'][0]['date'] : 'Unknown';
 			if (false === strpos($filename, 'tar.gz')) {
 				$filename = $vinfo['source'][1]['filename'];
-				$md5hash  = isset($vinfo['source'][1]['md5']) ? $vinfo['source'][1]['md5'] : '';
+				$md5hash  = isset($vinfo['source'][1]['md5'])  ? $vinfo['source'][1]['md5']  : '';
+				$date     = isset($vinfo['source'][1]['date']) ? $vinfo['source'][1]['date'] : 'Unknown';
 			}
-
+			
 			$data[$version] = array(
-				'date'		=> trim($vinfo['date']),
+				'date'		=> trim($date),
 				'md5hash'	=> trim($md5hash),
 				'filename'	=> trim($filename),
 				'museum'	=> (array_key_exists('museum', $vinfo) ? $vinfo['museum'] : false),
@@ -383,6 +391,10 @@ function download_file ($url, $savepath, $md5hash = false) {
 	stream_context_set_params($ctx, array('notification' => 'stream_notification_callback'));
 
 	$fp = fopen($url, 'r', false, $ctx);
+	if (!$fp) {
+		echo "ERROR: Unable to open this url for download: $url", PHP_EOL;
+		return false;
+	}
 	if (is_resource($fp) && file_put_contents($savepath, $fp)) {
 		fclose($fp);
 		if ($md5hash) {
@@ -418,7 +430,7 @@ function get_version_configs($options, $version) {
 */
 function choose_random_mirror() {
 	
-	$known_mirrors = array('us', 'us2', 'uk', 'uk2', 'www');
+	$known_mirrors = array('us', 'uk', 'de', 'www');
 	shuffle($known_mirrors);
 	return $known_mirrors[0] . '.php.net';
 }

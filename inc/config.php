@@ -40,7 +40,7 @@ define ('DEFAULT_OUTPUT_TYPE', 'stdout');
 
 // Includes all versions greater than defined values, separated by major version
 // Ex: '4', '5' === all PHP 4's and 5's. '5.2.4' === All 5 versions >= 5.2.4
-$php_versions  = array('5.2.11');
+$php_versions  = array('5.4.2');
 
 // TODO: This isn't implemented
 // Which snaps to download/build
@@ -59,6 +59,7 @@ $config_options_all = array(
 $config_options_versions = array(
 	'5.2' => '',
 	'5.3' => '',
+	'5.4' => '',
 );
 
 // Colours used in optional HTML output, First to Last.
