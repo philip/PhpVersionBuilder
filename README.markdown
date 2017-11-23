@@ -1,3 +1,6 @@
+## Status ##
+This is old and unmaintained. Do not use or look at this.
+
 ## What it does ##
 - Finds PHP downloads, based on minimum PHP version desires
 - Extracts said downloads
